@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('descripcion');
-            $table->integer('nivel_seguridad');
-            $table->boolean('estado')->default(true);
+            $table->enum('estado',['ACTIVO','INACTIVO'])->default('ACTIVO');
             $table->timestamps();
         });
     }

@@ -16,7 +16,13 @@ return new class extends Migration
             $table->string('numero_requerimiento')->unique();
             $table->foreignId('area_id')->constrained();
             $table->foreignId('responsable_id')->constrained();
+            $table->string('area_responsable');
+            $table->timestamp('check_in');
+            $table->timestamp('check_out')->nullable();
+            $table->enum('estado',['ACTIVO','FINALIZADO'])->default('ACTIVO');
             $table->timestamps();
+
+            $table->index(['numero_requerimiento','estado']);
         });
     }
 

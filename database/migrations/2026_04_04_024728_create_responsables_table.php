@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('responsables', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('user_ipa');
+            $table->string('nombre_responsable');
+            $table->string('apellido_apellido');
+            $table->string('user_ipa_responsable');
             $table->timestamps();
         });
     }

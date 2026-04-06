@@ -17,13 +17,8 @@ return new class extends Migration
             $table->string('nombre_persona');
             $table->string('apellido_persona');
             $table->string('cedula_persona');
-            $table->timestamp('check_in');
-            $table->timestamp('check_out')->nullable();
-            $table->enum('estado',['ACTIVO','FINALIZADO'])->default('ACTIVO');
+            $table->string('empresa');
             $table->timestamps();
-
-            $table->index(['cedula_persona','estado']);
-            $table->index('requerimiento_id');
         });
     }
 
