@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('responsables', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_responsable');
-            $table->string('apellido_apellido');
-            $table->string('user_ipa_responsable');
+            $table->string('nombre', 50);
+            $table->string('apellido', 50);
+            $table->string('mail', 100)->unique();
+            $table->string('usuario_red', 10)->unique();
+            $table->boolean('active')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
