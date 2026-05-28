@@ -2,37 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAreaRequest;
+use App\Http\Requests\UpdateAreaRequest;
+use App\Http\Resources\AreaResource;
 use App\Models\Area;
-use Illuminate\Http\Request;
+use App\Services\AreaService;
+use Illuminate\Http\JsonResponse;
 
-class AreaController extends Controller
+class AreaController extends BaseController
 {
-    public function index()
+    public function __construct(private readonly AreaService $service) {}
+
+    public function index(): JsonResponse
     {
-        return Area::all();
+        $areas = $this->service->getAll();
+        return $this->sendResponse(
+            AreaResource::collection($areas),
+            'Áreas recuperadas exitosamente.'
+        );
     }
 
-    public function store(Request $request)
+    public function store(StoreAreaRequest $request): JsonResponse
     {
-        return Area::create($request->all());
+        $area = $this->service->create($request);
+        return $this->sendResponse(
+            new AreaResource($area),
+            'Área creada exitosamente.',
+            201
+        );
     }
 
-    public function show($id)
+    public function show(Area $area): JsonResponse
     {
-        return Area::findOrFail($id);
+        return $this->sendResponse(
+            new AreaResource($area),
+            'Área recuperada exitosamente.'
+        );
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAreaRequest $request, Area $area): JsonResponse
     {
-        $area = Area::findOrFail($id);
-        $area->update($request->all());
-        return $area;
+        $area = $this->service->update($request, $area);
+        return $this->sendResponse(
+            new AreaResource($area),
+            'Área actualizada exitosamente.'
+        );
     }
 
-    public function destroy($id)
+    public function destroy(Area $area): JsonResponse
     {
-        Area::destroy($id);
-        return response()->json(['message' => 'Área eliminada.']);
+        $this->service->delete($area);
+        return $this->sendResponse([], 'Área eliminada exitosamente.');
     }
 }

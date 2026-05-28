@@ -9,7 +9,7 @@ use App\Models\Responsable;
 use App\Services\ResponsableService;
 use Illuminate\Http\JsonResponse;
 
-class ResponsibleController extends BaseController
+class ResponsableController extends BaseController
 {
     // Inyección por constructor
     public function __construct(private readonly ResponsableService $service) {}

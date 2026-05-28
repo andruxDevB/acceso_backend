@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('acceso_detalles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('requerimiento_id')->constrained('accesos')->cascadeOnDelete();
-            $table->string('nombre_persona');
-            $table->string('apellido_persona');
-            $table->string('cedula_persona');
-            $table->string('empresa');
+            $table->foreignId('acceso_id')->constrained('accesos')->cascadeOnDelete();
+            $table->string('nombre_persona', 50);
+            $table->string('apellido_persona', 50);
+            $table->string('cedula_persona', 10);
+            $table->string('empresa', 100);
             $table->timestamps();
         });
     }

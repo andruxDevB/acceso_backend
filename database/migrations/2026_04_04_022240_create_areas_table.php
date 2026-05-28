@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->text('descripcion');
+            $table->string('nombre', 100)->unique();
+            $table->string('descripcion', 255)->nullable();
             $table->enum('estado',['ACTIVO','INACTIVO'])->default('ACTIVO');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
