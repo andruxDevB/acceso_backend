@@ -18,7 +18,7 @@ return new class extends Migration
                   ->constrained('areas')
                   ->restrictOnDelete();
             $table->foreignId('responsable_id')
-                  ->constrained('responsibles')
+                  ->constrained('responsables')
                   ->restrictOnDelete();
             $table->enum('estado', ['ACTIVO', 'FINALIZADO'])->default('ACTIVO');
             $table->timestamp('check_out')->nullable();

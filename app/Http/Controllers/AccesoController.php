@@ -1,46 +1,58 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreAccesoRequest;
+use App\Http\Resources\AccesoResource;
 use App\Models\Acceso;
-use App\Models\AccesoDetalle;
-use App\Http\Requests\AccesoStoreRequest;
-use Illuminate\Http\Request;
+use App\Services\AccesoService;
+use Illuminate\Http\JsonResponse;
 
-class AccesoController extends Controller
+class AccesoController extends BaseController
 {
-    public function store(AccesoStoreRequest $request)
+    public function __construct(private readonly AccesoService $service) {}
+
+    public function index(): JsonResponse
     {
-        $req = Acceso::create([
-            'numero_requerimiento'  => $request->numero_requerimiento,
-            'area_id'               => $request->area_id,
-            'responsable_id'        => $request->responsable_id,
-            'area_responsable'      => $request->area_responsable,
-            'check_in'              => now(),
-            'estado'                => 'ACTIVO'
-        ]);
-
-        foreach ($request->persona as $persona) {
-            AccesoDetalle::create([
-                'requerimiento_id'  => $req->id,
-                'nombre_persona'    => $persona['nombre'],
-                'apellido_persona'  => $persona['apellido'],
-                'cedula_persona'    => $persona['cedula'],
-                'empresa'           => $persona['empresa']
-            ]);
-        }
-
-        return response()->json($req->load('detalles'));      
+        $accesos = $this->service->getAll();
+        return $this->sendResponse(
+            AccesoResource::collection($accesos),
+            'Accesos recuperados exitosamente.'
+        );
     }
 
-    public function index()
+    public function store(StoreAccesoRequest $request): JsonResponse
     {
-        return Acceso::with('detalles')->get();
+        $acceso = $this->service->create($request);
+        return $this->sendResponse(
+            new AccesoResource($acceso),
+            'Acceso registrado exitosamente.',
+            201
+        );
     }
 
-    public function show($id)
+    public function show(Acceso $acceso): JsonResponse
     {
-        return Acceso::with('detalles')->findOrFail($id);
+        $acceso->load(['area', 'responsable', 'personas']);
+        return $this->sendResponse(
+            new AccesoResource($acceso),
+            'Acceso recuperado exitosamente.'
+        );
+    }
+
+    // Endpoint dedicado para check_out — semántica clara
+    public function checkOut(Acceso $acceso): JsonResponse
+    {
+        $acceso = $this->service->checkOut($acceso);
+        return $this->sendResponse(
+            new AccesoResource($acceso),
+            'Salida registrada exitosamente.'
+        );
+    }
+
+    public function destroy(Acceso $acceso): JsonResponse
+    {
+        $this->service->delete($acceso);
+        return $this->sendResponse([], 'Acceso eliminado exitosamente.');
     }
 }
