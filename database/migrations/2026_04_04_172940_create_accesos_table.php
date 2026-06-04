@@ -14,15 +14,21 @@ return new class extends Migration
         Schema::create('accesos', function (Blueprint $table) {
             $table->id();
             $table->string('numero_requerimiento')->unique();
-            $table->foreignId('area_id')->constrained('areas')->restrictedOnDelete();
-            $table->foreignId('responsable_id')->constrained('responsables')->restrictedOnDelete();
-            $table->timestamp('check_in');
+            $table->foreignId('area_id')
+                  ->constrained('areas')
+                  ->restrictOnDelete();
+            $table->foreignId('responsable_id')
+                  ->constrained('responsibles')
+                  ->restrictOnDelete();
+            $table->enum('estado', ['ACTIVO', 'FINALIZADO'])->default('ACTIVO');
             $table->timestamp('check_out')->nullable();
-            $table->enum('estado',['ACTIVO','FINALIZADO'])->default('ACTIVO');
-            $table->timestamps();
             $table->softDeletes();
-
-            $table->index(['numero_requerimiento','estado']);
+            $table->timestamps();
+        
+            $table->index('estado');
+            $table->index(['area_id', 'estado']);
+            $table->index('responsable_id');
+            $table->index('created_at');
         });
     }
 

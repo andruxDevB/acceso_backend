@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('acceso_detalles', function (Blueprint $table) {
+        Schema::create('personas_acceso', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('acceso_id')->constrained('accesos')->cascadeOnDelete();
-            $table->string('nombre_persona', 50);
-            $table->string('apellido_persona', 50);
-            $table->string('cedula_persona', 10);
+            $table->foreignId('acceso_id')
+                  ->constrained('accesos')
+                  ->cascadeOnDelete();
+            $table->string('nombre', 50);
+            $table->string('apellido', 50);
+            $table->string('cedula', 20);
             $table->string('empresa', 100);
             $table->timestamps();
         });
