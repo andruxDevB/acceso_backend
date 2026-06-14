@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAccesoRequest;
 use App\Http\Resources\AccesoResource;
