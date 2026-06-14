@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Respose;
+use Illuminate\Http\Response;
 
 class BaseController extends Controller
 {
